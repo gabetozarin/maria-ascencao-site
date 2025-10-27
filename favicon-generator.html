@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gerador de Favicon - María Ascenção</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f8ebff;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #d3aafc;
+            text-align: center;
+        }
+        .logo-preview {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .logo-preview img {
+            max-width: 200px;
+            border: 2px solid #d3aafc;
+            border-radius: 10px;
+            padding: 10px;
+            background: white;
+        }
+        canvas {
+            border: 2px solid #d3aafc;
+            margin: 10px;
+        }
+        .sizes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        button {
+            background: #d3aafc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #b894f0;
+        }
+        .instructions {
+            background: #f8ebff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .download-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerador de Favicon - María Ascenção</h1>
+        
+        <div class="logo-preview">
+            <img id="logoImg" src="assets/Captura de ecrã 2025-10-27 185632.png" alt="Logo María Ascenção">
+        </div>
+
+        <div class="instructions">
+            <h3>Instruções:</h3>
+            <ol>
+                <li>O logo será automaticamente convertido para diferentes tamanhos</li>
+                <li>Clique nos botões abaixo para gerar os favicons</li>
+                <li>Clique com botão direito em cada favicon → "Salvar imagem como"</li>
+                <li>Salve os ficheiros na pasta do projeto</li>
+            </ol>
+        </div>
+
+        <div class="sizes">
+            <div>
+                <h4>16x16 (Browser Tab)</h4>
+                <canvas id="canvas16" width="16" height="16"></canvas>
+                <br>
+                <button onclick="generateFavicon(16)">Gerar 16x16</button>
+                <button onclick="downloadCanvas('canvas16', 'favicon-16x16.png')">Download</button>
+            </div>
+            
+            <div>
+                <h4>32x32 (Browser Tab)</h4>
+                <canvas id="canvas32" width="32" height="32"></canvas>
+                <br>
+                <button onclick="generateFavicon(32)">Gerar 32x32</button>
+                <button onclick="downloadCanvas('canvas32', 'favicon-32x32.png')">Download</button>
+            </div>
+            
+            <div>
+                <h4>48x48 (Browser)</h4>
+                <canvas id="canvas48" width="48" height="48"></canvas>
+                <br>
+                <button onclick="generateFavicon(48)">Gerar 48x48</button>
+                <button onclick="downloadCanvas('canvas48', 'favicon-48x48.png')">Download</button>
+            </div>
+            
+            <div>
+                <h4>180x180 (Apple Touch)</h4>
+                <canvas id="canvas180" width="180" height="180"></canvas>
+                <br>
+                <button onclick="generateFavicon(180)">Gerar 180x180</button>
+                <button onclick="downloadCanvas('canvas180', 'apple-touch-icon.png')">Download</button>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <button onclick="generateAllFavicons()" style="font-size: 16px; padding: 15px 30px;">
+                🎯 Gerar Todos os Favicons
+            </button>
+        </div>
+
+        <div class="instructions">
+            <h3>Depois de baixar:</h3>
+            <p>1. Coloque os ficheiros na pasta raiz do projeto (junto com index.html)</p>
+            <p>2. O favicon.ico será gerado automaticamente</p>
+        </div>
+    </div>
+
+    <script>
+        function generateFavicon(size) {
+            const canvas = document.getElementById(`canvas${size}`);
+            const ctx = canvas.getContext('2d');
+            const img = document.getElementById('logoImg');
+            
+            // Limpar canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            // Fundo transparente ou branco
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Desenhar logo redimensionado
+            ctx.drawImage(img, 0, 0, size, size);
+        }
+        
+        function downloadCanvas(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        function generateAllFavicons() {
+            generateFavicon(16);
+            generateFavicon(32);
+            generateFavicon(48);
+            generateFavicon(180);
+        }
+        
+        // Gerar automaticamente quando a imagem carregar
+        document.getElementById('logoImg').onload = function() {
+            generateAllFavicons();
+        };
+        
+        // Se a imagem já estiver carregada
+        if (document.getElementById('logoImg').complete) {
+            generateAllFavicons();
+        }
+    </script>
+</body>
+</html>

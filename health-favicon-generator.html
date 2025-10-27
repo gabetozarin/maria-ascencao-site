@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Health Favicon</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f8ebff; text-align: center; }
+        .container { max-width: 400px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; }
+        canvas { border: 2px solid #d3aafc; margin: 10px; }
+        button { background: #d3aafc; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background: #b894f0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Health Care Favicon Generator</h2>
+        
+        <canvas id="favicon16" width="16" height="16"></canvas>
+        <canvas id="favicon32" width="32" height="32"></canvas>
+        <br>
+        
+        <button onclick="downloadFavicon(16)">Download 16x16</button>
+        <button onclick="downloadFavicon(32)">Download 32x32</button>
+        <button onclick="downloadAll()">Download All</button>
+        
+        <p>Save as favicon-16x16.png and favicon-32x32.png</p>
+    </div>
+
+    <script>
+        function drawHealthIcon(ctx, size) {
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            // Background circle
+            const center = size / 2;
+            const radius = size / 2 - 1;
+            
+            ctx.fillStyle = '#d3aafc';
+            ctx.beginPath();
+            ctx.arc(center, center, radius, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Border
+            ctx.strokeStyle = '#b894f0';
+            ctx.lineWidth = size > 16 ? 2 : 1;
+            ctx.stroke();
+            
+            // Heart shape
+            ctx.fillStyle = 'white';
+            
+            const heartSize = size * 0.3;
+            const heartY = center - heartSize * 0.3;
+            
+            ctx.beginPath();
+            // Left curve
+            ctx.moveTo(center, heartY + heartSize * 1.3);
+            ctx.bezierCurveTo(
+                center - heartSize * 1.2, heartY + heartSize * 0.3,
+                center - heartSize * 1.2, heartY - heartSize * 0.2,
+                center - heartSize * 0.6, heartY
+            );
+            // Top left
+            ctx.bezierCurveTo(
+                center - heartSize * 0.3, heartY - heartSize * 0.3,
+                center - heartSize * 0.1, heartY - heartSize * 0.3,
+                center, heartY
+            );
+            // Top right
+            ctx.bezierCurveTo(
+                center + heartSize * 0.1, heartY - heartSize * 0.3,
+                center + heartSize * 0.3, heartY - heartSize * 0.3,
+                center + heartSize * 0.6, heartY
+            );
+            // Right curve
+            ctx.bezierCurveTo(
+                center + heartSize * 1.2, heartY - heartSize * 0.2,
+                center + heartSize * 1.2, heartY + heartSize * 0.3,
+                center, heartY + heartSize * 1.3
+            );
+            ctx.closePath();
+            ctx.fill();
+            
+            // Heart highlight for volume effect (tilted properly)
+            if (size >= 18) {
+                ctx.fillStyle = '#f8ebff';
+                ctx.globalAlpha = 0.8;
+                ctx.save();
+                ctx.translate(center - heartSize * 0.45, center - heartSize * 0.2);
+                ctx.rotate(25 * Math.PI / 180); // +25 degrees rotation (mirrored)
+                ctx.beginPath();
+                ctx.ellipse(0, 0, heartSize * 0.25, heartSize * 0.35, 0, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.restore();
+                ctx.globalAlpha = 1;
+            }
+        }
+        
+        function generateFavicon(size) {
+            const canvas = document.getElementById(`favicon${size}`);
+            const ctx = canvas.getContext('2d');
+            drawHealthIcon(ctx, size);
+        }
+        
+        function downloadFavicon(size) {
+            const canvas = document.getElementById(`favicon${size}`);
+            const link = document.createElement('a');
+            link.download = `favicon-${size}x${size}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        function downloadAll() {
+            downloadFavicon(16);
+            downloadFavicon(32);
+        }
+        
+        // Generate on load
+        generateFavicon(16);
+        generateFavicon(32);
+    </script>
+</body>
+</html>

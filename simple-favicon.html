@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Favicon Simples</title>
+</head>
+<body>
+    <canvas id="favicon" width="32" height="32"></canvas>
+    
+    <script>
+        // Criar favicon simples com as iniciais "MA"
+        const canvas = document.getElementById('favicon');
+        const ctx = canvas.getContext('2d');
+        
+        // Fundo roxo
+        ctx.fillStyle = '#d3aafc';
+        ctx.fillRect(0, 0, 32, 32);
+        
+        // Texto "MA"
+        ctx.fillStyle = '#1d1720';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('MA', 16, 16);
+        
+        // Converter para favicon
+        const link = document.createElement('a');
+        link.download = 'favicon.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    </script>
+</body>
+</html>
